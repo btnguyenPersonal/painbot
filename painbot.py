@@ -2,9 +2,10 @@ import time
 from gpiozero import Motor, PWMOutputDevice
 
 class Vehicle:
-    self.left_motor = Motor(forward=17, backward=22)
-    self.left_pwm = PWMOutputDevice(18)
-    self.left_pwm.value = 0.5
+    __init__(self):
+        self.left_motor = Motor(forward=17, backward=22)
+        self.left_pwm = PWMOutputDevice(18)
+        self.left_pwm.value = 0.5
 
 rpi_vehicle = Vehicle()
 
