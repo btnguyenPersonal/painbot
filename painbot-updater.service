@@ -1,0 +1,13 @@
+[Unit]
+Description=Painbot Auto-Updater Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/home/ben/git/painbot/update_painbot.sh
+Restart=always
+User=ben
+WorkingDirectory=/home/ben/git/painbot
+
+[Install]
+WantedBy=multi-user.target
