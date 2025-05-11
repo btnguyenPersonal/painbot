@@ -5,10 +5,10 @@ class Vehicle:
     def __init__(self):
         self.left_motor = Motor(forward=17, backward=22)
         self.left_pwm = PWMOutputDevice(18)
-        self.left_pwm.value = 0.5
+        self.left_pwm.value = 1
         self.right_motor = Motor(forward=23, backward=24)
         self.right_pwm = PWMOutputDevice(25)
-        self.right_pwm.value = 0.5
+        self.right_pwm.value = 1
 
     def stop(self):
         rpi_vehicle.left_motor.stop()
@@ -34,12 +34,17 @@ rpi_vehicle = Vehicle()
 
 def main():
     i = 0
-    while True:
-        print("forward " + str(i))
+    while i < 4:
         i += 1
-        rpi_vehicle.left_motor.forward()
+        if i % 2 == 0:
+            print("forward " + str(i))
+            rpi_vehicle.left_motor.forward()
+        else:
+            print("backward " + str(i))
+            rpi_vehicle.left_motor.backward()
         time.sleep(0.5)
         rpi_vehicle.left_motor.stop()
-        time.sleep(0.5)
+        time.sleep(3)
+    rpi_vehicle.left_motor.stop()
 
 main()
