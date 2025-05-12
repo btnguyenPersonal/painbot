@@ -1,3 +1,4 @@
+import curses
 import time
 from gpiozero import Motor, PWMOutputDevice
 
@@ -11,40 +12,49 @@ class Vehicle:
         self.right_pwm.value = 1
 
     def stop(self):
+        print("stop")
         rpi_vehicle.left_motor.stop()
         rpi_vehicle.right_motor.stop()
 
     def forward(self):
+        print("forward")
         rpi_vehicle.left_motor.forward()
         rpi_vehicle.right_motor.forward()
 
     def backward(self):
+        print("backward")
         rpi_vehicle.left_motor.backward()
         rpi_vehicle.right_motor.backward()
 
     def turn_left(self):
-        rpi_vehicle.left_motor.backward()
+        print("turn_left")
         rpi_vehicle.right_motor.forward()
 
     def turn_right(self):
+        print("turn_right")
         rpi_vehicle.left_motor.forward()
-        rpi_vehicle.right_motor.backward()
 
 rpi_vehicle = Vehicle()
 
-def main():
-    i = 0
-    while i < 4:
-        i += 1
-        if i % 2 == 0:
-            print("forward " + str(i))
-            rpi_vehicle.left_motor.forward()
+def main(stdscr):
+    stdscr.nodelay(1)
+    while True:
+        c = stdscr.getch()
+        stdscr.addstr("\n\n")
+        stdscr.refresh()
+        stdscr.move(0, 0)
+        if c != -1:
+            if c == 119:
+                rpi_vehicle.forward()
+            elif c == 115:
+                rpi_vehicle.backward()
+            elif c == 97:
+                rpi_vehicle.turn_left()
+            elif c == 100:
+                rpi_vehicle.turn_right()
         else:
-            print("backward " + str(i))
-            rpi_vehicle.left_motor.backward()
+            rpi_vehicle.stop()
         time.sleep(0.5)
-        rpi_vehicle.left_motor.stop()
-        time.sleep(3)
-    rpi_vehicle.left_motor.stop()
 
-main()
+if __name__ == "__main__":
+    curses.wrapper(main)
